@@ -18,7 +18,7 @@ export default function IndexPage() {
       console.log(userID);
     }, 200);
 
-    if(Object.entries(userData).length != 0){
+    if(userData){
       getProfile();
 
     }
