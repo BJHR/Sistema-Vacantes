@@ -4,6 +4,7 @@ import TodoList from '../components/TodoList'
 import Navbar from '../components/navbar/navbar';
 import { useEffect, useState } from 'react';
 import AddStudent from '../components/addStudent';
+import Postulado from '../components/postulados/postulados';
 
 export default function IndexPage() {
   const { user } = Auth.useUser();
@@ -87,7 +88,8 @@ export default function IndexPage() {
                 profileData.role == 'maestro' ? (
                   <div>
                     <h1>Maestro </h1>
-                    vacantes
+                    postulados
+                    <Postulado></Postulado>
                   </div>
                 ) : null
               )
