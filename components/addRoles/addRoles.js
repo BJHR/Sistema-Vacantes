@@ -24,7 +24,10 @@ const StyledAddRoles = styled.div`
     .filepicker {
         margin: 1rem 0;
     }
-    
+    .MuiTableContainer-root{
+        max-height: 70vh;
+        overflow-y: auto;
+    }
     
 
 `;

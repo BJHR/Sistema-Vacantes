@@ -63,8 +63,8 @@ export default function Postulado() {
                                     </TableCell>
                                     <TableCell align="right">{row.carrera}</TableCell>
                                     <TableCell align="right"><a target="_blanks" href="">Curriculum</a></TableCell>
-                                    <TableCell align="right">{row.carbs}</TableCell>
-                                    <TableCell align="right">{row.protein}</TableCell>
+                                    <TableCell align="right">{row.cellphone}</TableCell>
+                                    <TableCell align="right">{row.email}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

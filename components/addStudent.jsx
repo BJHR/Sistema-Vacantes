@@ -152,11 +152,6 @@ const AddStudent = (profile) => {
         <StyledAddRoles>
             <h6>Actualiza tu cuenta</h6>
             <form onSubmit={handleSubmit(onSubmit)}>
-                {control._formValues.role == '' && (
-                    <div></div>
-                )
-                }
-
                 <Controller
                     name="role"
                     control={control}
