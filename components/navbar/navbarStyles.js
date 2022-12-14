@@ -28,6 +28,15 @@ const StyledNavbar = styled.nav`
             justify-content: space-between;
             align-items: center;
         }
+        .links{
+            display: flex;
+            justify-content: space-between;
+            
+            p{
+                cursor: pointer;
+                margin: 0 1rem;
+            }
+        }
 `;
 
 export default StyledNavbar;

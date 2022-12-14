@@ -5,38 +5,54 @@ import Navbar from '../components/navbar/navbar';
 import { useEffect, useState } from 'react';
 import AddStudent from '../components/addStudent';
 import Postulado from '../components/postulados/postulados';
+import { useUser } from '@supabase/auth-helpers-react';
+import AgregarVacante from '../components/agregarVacante';
+import Vacantes from '../components/verVacantes';
+
+
 
 export default function IndexPage() {
-  const { user } = Auth.useUser();
+  const { user,error } = Auth.useUser();
+  const loggeduser = useUser();
   let userID = '';
   const [userData, setUserData] = useState({});
   const [profileData, setProfileData] = useState({})
   
+  const [page, setPage] = useState('home');
   useEffect(() => {
-    setTimeout( () => {
-      setUserData(supabase.auth.user());
-      userID = supabase.auth.user();
-      console.log(userID);
-    }, 200);
 
-    if(userData){
-      getProfile();
-
-    }
-  }, [userData]);
+    // for scenario 2, this will fire a SIGNED_IN event shortly after page load once the session has been loaded from the server.
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log(`Supbase auth event: ${event}`); 
+        console.log('sess',session);
+        if(session){
+          getProfile(session.user.id);
+        }
+      }
+    );
+   
+    return () => {
+      authListener.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   
-  const getProfile = async () => {
+  
+  const getProfile = async (id) => {
+    console.log(id);
     let { data: profiles, error } = await supabase
       .from('profiles')
       .select("*")
-      .eq('id', userData.id)
+      .eq('id', id)
     if (error) {
       console.log('error', error.message)
     }
     else {
+        console.log(profiles);
       setProfileData(profiles[0])
-      console.log(profileData, profiles);
+      //console.log(profileData, profiles);
     }
 
   }
@@ -62,16 +78,19 @@ export default function IndexPage() {
             className="w-full h-full flex flex-col justify-center items-center p-4"
             style={{ margin: 'auto' }}
           >
-            {supabase.auth.user() ? (
+            {profileData != null || profileData !={} ? (
               <Navbar 
                 user={supabase.auth.user()}
+                profileData={profileData}
+                changePage={(page) => {setPage(page)}}
+                page={page}
                 logout={() => {
                   setProfileData({})
                 }}
 
                 ></Navbar>
             ) : null}
-            {profileData.role == null || profileData.role == '' ? (
+            {profileData == null || profileData == {} ? (
               <AddStudent setProfile={(data) => { 
                 console.log(data);
                 setProfileData(data)
@@ -87,9 +106,15 @@ export default function IndexPage() {
               ) : (
                 profileData.role == 'maestro' ? (
                   <div>
-                    <h1>Maestro </h1>
-                    postulados
-                    <Postulado></Postulado>
+                    <div className='navMaestro'>
+                      <h4>Vacantes disponibles</h4>
+                     
+                    </div>
+                    {page == 'ver' ? (
+                      <Vacantes />
+                      ): (
+                      <AgregarVacante />
+                      )}
                   </div>
                 ) : null
               )
