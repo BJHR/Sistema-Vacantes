@@ -40,6 +40,7 @@ const AgregarVacante = () => {
             console.log(error);
         }
         else {
+            setSuccess(true);
             console.log(data);
         }
     }

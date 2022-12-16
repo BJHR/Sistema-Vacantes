@@ -36,6 +36,6 @@ const StyledAddVacante = styled.div`
         .sendBtn{
             width: 70%;
         }
-    }
+    }   
 `
 export default StyledAddVacante;

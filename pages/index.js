@@ -15,9 +15,10 @@ export default function IndexPage() {
   const { user,error } = Auth.useUser();
   const loggeduser = useUser();
   let userID = '';
+  const [editItem, setEditItem] = useState(null);
   const [userData, setUserData] = useState({});
   const [profileData, setProfileData] = useState({})
-  
+  const [vacancyId, setVacancyId] = useState('');
   const [page, setPage] = useState('home');
   useEffect(() => {
 
@@ -28,6 +29,7 @@ export default function IndexPage() {
         console.log('sess',session);
         if(session){
           getProfile(session.user.id);
+          setUserData(session.user);
         }
       }
     );
@@ -81,7 +83,7 @@ export default function IndexPage() {
             {profileData != null || profileData !={} ? (
               <Navbar 
                 user={supabase.auth.user()}
-                profileData={profileData}
+                id={profileData}
                 changePage={(page) => {setPage(page)}}
                 page={page}
                 logout={() => {
@@ -90,7 +92,7 @@ export default function IndexPage() {
 
                 ></Navbar>
             ) : null}
-            {profileData == null || profileData == {} ? (
+            {profileData.role == null ? (
               <AddStudent setProfile={(data) => { 
                 console.log(data);
                 setProfileData(data)
@@ -99,22 +101,30 @@ export default function IndexPage() {
             (
                profileData.role == 'estudiante' ? (
                 <div>
-                  <h1>Estudiante</h1>
-                  vacantes
+                  {page == 'ver' ? (
+                      <Vacantes user={userData} rol={'alumni'} />
+                      ):null}
                 </div>
 
               ) : (
                 profileData.role == 'maestro' ? (
                   <div>
-                    <div className='navMaestro'>
-                      <h4>Vacantes disponibles</h4>
-                     
-                    </div>
                     {page == 'ver' ? (
-                      <Vacantes />
-                      ): (
-                      <AgregarVacante />
-                      )}
+                      <Vacantes 
+                        rol={'maestro'}
+                        changePage={(page) => {setPage(page)}}
+                        vacancyId={(id) => {setVacancyId(id)}}
+                      />
+                      ): 
+                      page == 'agregar' ? (
+                        <AgregarVacante />
+                      ) : 
+                      page == 'postulados' ? (
+                        <Postulado vacancyId={vacancyId}/>
+                      ) : null
+
+
+                      }
                   </div>
                 ) : null
               )

@@ -150,8 +150,9 @@ const AddStudent = (profile) => {
     //console.log(user);
     return (
         <StyledAddRoles>
-            <h6>Actualiza tu cuenta</h6>
             <form onSubmit={handleSubmit(onSubmit)}>
+            <h6>Actualiza tu cuenta</h6>
+
                 <Controller
                     name="role"
                     control={control}

@@ -8,21 +8,26 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { supabase } from '../../lib/initSupabase';
 
-export default function Postulado() {
+export default function Postulado(props) {
     const [postulados, setPostulados] = React.useState([]);
     React.useEffect(() => {
+        console.log(props.vacancyId);
         const getPostulados = async () => {
 
             let { data: profiles, error } = await supabase
                 .from('profiles')
                 .select('*')
+                .eq('vacancy_id', props.vacancyId)
             if (error) console.log('error', error)
             else {
                 setPostulados(profiles);
                 console.log('profiles', profiles)       
             }
         }
-        getPostulados();    
+        if(props.vacancyId){
+            getPostulados(props.vacancyId);    
+
+        }
     }, [])  
             return (
                 <TableContainer component={Paper}>

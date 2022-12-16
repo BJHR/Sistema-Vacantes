@@ -6,10 +6,29 @@ import { Auth } from "@supabase/ui";
 
 const Navbar = (props) => {
     const user=Auth.useUser();
+    const [profileData, setProfileData] = useState({})
+    const getProfile = async (id) => {
+        console.log(id);
+        let { data: profiles, error } = await supabase
+          .from('profiles')
+          .select("*")
+          .eq('id', id)
+        if (error) {
+          console.log('error', error.message)
+        }
+        else {
+            console.log(profiles);
+          setProfileData(profiles[0])
+          //console.log(profileData, profiles);
+        }
+    
+      }
 
     useEffect(() => {
-        console.log(props);
-        //console.log(user.user.user_metadata);
+        //console.log(props);
+        if(props.user){
+            getProfile(props.user.id)
+        }
     }, [props])
 
     
@@ -25,12 +44,12 @@ const Navbar = (props) => {
                             props.changePage('ver')
                         }}
                         >Ver Vacante</p>
-                        {props.profileData.role == 'maestro' ? (
+                        {profileData?.role === 'maestro' ? (
                             <p
                         onClick={() => {
-                            props.changePage('crear')
+                            props.changePage('agregar')
                         }}
-                        >Crear Vacantes</p>
+                        >Agregar Vacantes</p>
                         ) : null
 
                         }
